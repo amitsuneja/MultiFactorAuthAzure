@@ -1,0 +1,26 @@
+import meraki
+
+
+# Defining your API key as a variable in source code is not recommended
+API_KEY = 'SECRET_KEY'
+# Instead, use an environment variable as shown under the Usage section
+# @ https://github.com/meraki/dashboard-api-python/
+
+dashboard = meraki.DashboardAPI(API_KEY)
+
+organization_id = '111111'
+
+response = dashboard.appliance.getOrganizationApplianceUplinkStatuses(
+    organization_id, total_pages='all'
+)
+
+ipadd_file="d:\\IP-List.txt"
+
+with open(ipadd_file , 'w') as outfile:
+    for line in response:
+        for entry in line["uplinks"]:
+            if (entry["ip"]):
+                ipaddress=entry["ip"]+"/32"
+                print(ipaddress)
+                outfile.write(ipaddress)
+                outfile.write("\n")
